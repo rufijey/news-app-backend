@@ -1,15 +1,34 @@
 export const schema ={
-    tags: ['feed'],
-        summary: 'Get feed data',
-        description: 'Get feed data',
-        response: {
+    querystring: {
+        type: "object",
+        properties: {
+            url: { type: "string", format: "uri", nullable: true },
+            force: { type: "string", enum: ["0", "1"] },
+        },
+        additionalProperties: false,
+    },
+    response: {
         200: {
-            type: 'object',
-                properties: {
-                hello: {
-                    type: 'string',
-                }
-            }
-        }
-    }
+            type: "object",
+            properties: {
+                count: { type: "integer" },
+                news: {
+                    type: "array",
+                    items: {
+                        type: "object",
+                        properties: {
+                            id: { type: "string" },
+                            title: { type: ["string", "null"] },
+                            date: { type: ["string", "null"] },
+                            contentSnippet: { type: "string" },
+                            source: { type: "string" },
+                        },
+                        required: ["id", "title", "date", "contentSnippet", "source"],
+                        additionalProperties: false,
+                    },
+                },
+            },
+            required: ["count", "news"],
+        },
+    },
 } as const
