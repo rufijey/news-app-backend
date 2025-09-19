@@ -1,15 +1,19 @@
 import Parser from "rss-parser";
 import retry from "async-retry";
 import {News} from "../types/news.types";
-import {feedRepository} from "./feed.repository";
-import {randomUUID} from "node:crypto";
+import {FeedRepository} from "./feed.repository";
+import { ObjectId } from "bson";
+import {FastifyInstance} from "fastify";
 
 
-class FeedService {
+export class FeedService {
     private parser: Parser;
+    private feedRepository: FeedRepository;
 
-    constructor() {
+    constructor(private fastify: FastifyInstance) {
         this.parser = new Parser();
+        this.feedRepository = new FeedRepository(fastify);
+
     }
 
     async getFeedData(url: string, isForce = false): Promise<News[]> {
@@ -18,21 +22,21 @@ class FeedService {
 
             const parsedNews = await this.parseFeed(url);
 
-            feedRepository.deleteBySource(url)
-                .then(() => feedRepository.createMany(parsedNews))
+            this.feedRepository.deleteBySource(url)
+                .then(() => this.feedRepository.createMany(parsedNews))
                 .catch(err => console.error('Background DB operation error:', err));
 
             return parsedNews;
         }
 
-        const news = await feedRepository.findBySource(url);
+        const news = await this.feedRepository.findBySource(url);
 
         if (news.length > 0) {
             return news;
         } else {
             const parsedNews = await this.parseFeed(url);
 
-            feedRepository.createMany(parsedNews)
+            this.feedRepository.createMany(parsedNews)
                 .catch((err) => console.log('Background DB operation error', err));
 
             return parsedNews;
@@ -62,7 +66,7 @@ class FeedService {
         const contentSnippet = item.contentSnippet ?? "";
 
         return {
-            id: randomUUID(),
+            id: new ObjectId().toHexString(),
             title: item.title ?? null,
             date,
             contentSnippet,
@@ -70,5 +74,3 @@ class FeedService {
         };
     }
 }
-
-export const feedService = new FeedService();
