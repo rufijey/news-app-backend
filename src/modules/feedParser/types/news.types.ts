@@ -1,4 +1,4 @@
-export interface NewsItem {
+export interface News {
     id: string;
     title: string | null;
     date: string | null;
