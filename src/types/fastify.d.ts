@@ -1,10 +1,10 @@
 import {Config} from "../config/schema";
-import prisma from '../prisma';
+import { PrismaClient } from '@prisma/client';
 
 declare module 'fastify' {
     interface FastifyInstance {
         config: Config;
         pluginLoaded: (pluginName: string) => void;
-        prisma: typeof prisma;
+        prisma: PrismaClient;
     }
 };
