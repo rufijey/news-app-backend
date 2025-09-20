@@ -1,7 +1,7 @@
-import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
-import {FeedService} from "../services/feed.service";
-import {FromSchema} from "json-schema-to-ts";
-import {schema} from "../schemas/getFeedData.schema";
+import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import type { FromSchema } from "json-schema-to-ts";
+import type { schema } from "../schemas/getFeedData.schema";
+import { FeedService } from "../services/feed.service";
 
 export class FeedController {
     private feedService: FeedService;
@@ -10,9 +10,12 @@ export class FeedController {
         this.feedService = new FeedService(fastify);
     }
 
-    async getFeedData(request: FastifyRequest<{
-        Querystring: FromSchema<typeof schema.querystring>
-    }>, reply: FastifyReply) {
+    async getFeedData(
+        request: FastifyRequest<{
+            Querystring: FromSchema<typeof schema.querystring>;
+        }>,
+        reply: FastifyReply,
+    ) {
         const url = request.query.url || this.fastify.config.DEFAULT_RSS_URL;
         const isForce = request.query.force === "1";
 

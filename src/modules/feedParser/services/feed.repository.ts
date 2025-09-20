@@ -1,10 +1,8 @@
-import {News} from "../types/news.types";
-import {FastifyInstance} from "fastify";
+import type { FastifyInstance } from "fastify";
+import type { News } from "../types/news.types";
 
 export class FeedRepository {
-    constructor(private fastify: FastifyInstance) {
-
-    }
+    constructor(private fastify: FastifyInstance) {}
 
     async createMany(news: Omit<News, "id">[]): Promise<{ count: number }> {
         return this.fastify.prisma.news.createMany({ data: news });
@@ -20,5 +18,4 @@ export class FeedRepository {
     async deleteBySource(source: string): Promise<{ count: number }> {
         return this.fastify.prisma.news.deleteMany({ where: { source } });
     }
-
 }
