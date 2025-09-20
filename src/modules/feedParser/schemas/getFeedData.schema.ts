@@ -1,4 +1,4 @@
-export const schema ={
+export const schema = {
     querystring: {
         type: "object",
         properties: {
@@ -31,4 +31,4 @@ export const schema ={
             required: ["count", "news"],
         },
     },
-} as const
+} as const;

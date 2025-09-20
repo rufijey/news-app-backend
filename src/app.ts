@@ -1,15 +1,14 @@
-import Fastify, {FastifyServerOptions} from "fastify";
-import {join} from "node:path";
+import { join } from "node:path";
 import AutoLoad from "@fastify/autoload";
+import Fastify, { type FastifyServerOptions } from "fastify";
 import configPlugin from "./config";
 import getFeedDataRoutes from "./modules/feedParser/routes/feed.route";
 
-export type AppOptions = Partial<FastifyServerOptions>
+export type AppOptions = Partial<FastifyServerOptions>;
 
-async function buildApp(options: AppOptions = {}){
-
-    const fastify = Fastify()
-    await  fastify.register(configPlugin)
+async function buildApp(options: AppOptions = {}) {
+    const fastify = Fastify();
+    await fastify.register(configPlugin);
     try {
         fastify.decorate("pluginLoaded", (pluginName: string) => {
             fastify.log.info(`✅ Plugin loaded: ${pluginName}`);
@@ -36,11 +35,7 @@ async function buildApp(options: AppOptions = {}){
         throw error;
     }
 
-    fastify.get("/", async (request, reply) => {
-        return {hello: "world"}
-    })
-
-    return fastify
+    return fastify;
 }
 
-export default buildApp
+export default buildApp;

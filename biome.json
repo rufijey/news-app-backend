@@ -1,0 +1,23 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "formatter": {
+    "indentStyle": "space",
+    "indentWidth": 4,
+    "lineWidth": 100
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "a11y": {
+        "useKeyWithClickEvents": "off"
+      },
+      "recommended": true
+    }
+  },
+  "files": {
+    "ignore": [
+      "build",
+      "node_modules"
+    ]
+  }
+}
