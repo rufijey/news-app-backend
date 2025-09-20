@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "concurrently -k -p \"[{name}]\" -n \"TypeScript,App\" -c \"yellow.bold,cyan.bold\" \"tsc -w\" \"nodemon\"",
+    "build": "tsc -p tsconfig.json",
     "lint": "biome lint src",
     "format": "biome format --write src",
     "check": "biome check src",
