@@ -7,7 +7,21 @@ import getFeedDataRoutes from "./modules/feedParser/routes/feed.route";
 export type AppOptions = Partial<FastifyServerOptions>;
 
 async function buildApp(options: AppOptions = {}) {
-    const fastify = Fastify();
+
+    const fastify = Fastify({
+        logger: {
+            level: "info",
+            transport: {
+                target: "pino-pretty",
+                options: {
+                    colorize: true,
+                    translateTime: "HH:MM:ss",
+                    ignore: "pid,hostname",
+                },
+            },
+        },
+    });
+
     await fastify.register(configPlugin);
     try {
         fastify.decorate("pluginLoaded", (pluginName: string) => {
