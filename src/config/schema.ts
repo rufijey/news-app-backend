@@ -5,8 +5,9 @@ export const EnvSchema = {
         PORT: { type: "number" },
         HOST: { type: "string" },
         DEFAULT_RSS_URL: { type: "string", format: "uri" },
+        API_URL: { type: "string", format: "uri" },
     },
-    required: ["PORT", "HOST", "DEFAULT_RSS_URL"],
+    required: ["PORT", "HOST", "DEFAULT_RSS_URL", "API_URL"],
     additionalProperties: false,
 } as const;
 export type Config = FromSchema<typeof EnvSchema>;
