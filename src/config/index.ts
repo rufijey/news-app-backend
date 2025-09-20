@@ -12,8 +12,7 @@ export default fp(
                 confKey: "config",
                 schema: EnvSchema,
                 dotenv: true,
-                // biome-ignore lint: Needed any
-                data: process.env as any,
+                data: process.env as Record<string, string | undefined>,
                 ajv: {
                     customOptions: () => {
                         const ajv = new Ajv({
