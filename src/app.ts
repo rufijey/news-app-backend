@@ -2,7 +2,6 @@ import { join } from "node:path";
 import AutoLoad from "@fastify/autoload";
 import Fastify, { type FastifyServerOptions } from "fastify";
 import configPlugin from "./config";
-import getFeedDataRoutes from "./modules/feedParser/routes/feed.route";
 
 export type AppOptions = Partial<FastifyServerOptions>;
 
