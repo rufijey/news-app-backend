@@ -6,7 +6,7 @@ export default async function healthRoute(fastify: FastifyInstance) {
         return {
             status: "ok",
             uptime: process.uptime(),
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
         };
     });
 

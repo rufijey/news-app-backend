@@ -6,7 +6,6 @@ import configPlugin from "./config";
 export type AppOptions = Partial<FastifyServerOptions>;
 
 async function buildApp(options: AppOptions = {}) {
-
     const fastify = Fastify({
         logger: {
             level: "info",
