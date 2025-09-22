@@ -1,5 +1,5 @@
 import axios from "axios";
-import * as cheerio from "cheerio/dist/browser";
+import * as cheerio from "cheerio";
 import type { FastifyInstance } from "fastify";
 import type { Article } from "../types/news.types";
 
