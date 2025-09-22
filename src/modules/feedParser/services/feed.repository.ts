@@ -1,21 +1,17 @@
 import type { FastifyInstance } from "fastify";
 import type { News } from "../types/news.types";
 
-export class FeedRepository {
-    constructor(private fastify: FastifyInstance) {}
+export async function createMany(fastify: FastifyInstance, news: Omit<News, "id">[]) {
+    return fastify.prisma.news.createMany({ data: news });
+}
 
-    async createMany(news: Omit<News, "id">[]): Promise<{ count: number }> {
-        return this.fastify.prisma.news.createMany({ data: news });
-    }
+export async function findBySource(fastify: FastifyInstance, source: string) {
+    return fastify.prisma.news.findMany({
+        where: { source },
+        orderBy: { date: "desc" },
+    });
+}
 
-    async findBySource(source: string): Promise<News[]> {
-        return this.fastify.prisma.news.findMany({
-            where: { source },
-            orderBy: { date: "desc" },
-        });
-    }
-
-    async deleteBySource(source: string): Promise<{ count: number }> {
-        return this.fastify.prisma.news.deleteMany({ where: { source } });
-    }
+export async function deleteBySource(fastify: FastifyInstance, source: string) {
+    return fastify.prisma.news.deleteMany({ where: { source } });
 }

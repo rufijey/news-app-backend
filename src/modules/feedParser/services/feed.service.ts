@@ -3,66 +3,55 @@ import { ObjectId } from "bson";
 import type { FastifyInstance } from "fastify";
 import Parser from "rss-parser";
 import type { News } from "../types/news.types";
-import { FeedRepository } from "./feed.repository";
+import * as feedRepo from "./feed.repository";
 
-export class FeedService {
-    private parser: Parser;
-    private feedRepository: FeedRepository;
+const parser = new Parser();
 
-    constructor(private fastify: FastifyInstance) {
-        this.parser = new Parser();
-        this.feedRepository = new FeedRepository(fastify);
-    }
+function normalizeItem(item: Parser.Item, url: string): News {
+    const date = item.isoDate ? new Date(item.isoDate).toISOString() : null;
 
-    async getFeedData(url: string, isForce = false): Promise<News[]> {
-        if (isForce) {
-            const parsedNews = await this.parseFeed(url);
+    return {
+        id: new ObjectId().toHexString(),
+        title: item.title ?? "",
+        date,
+        contentSnippet: item.contentSnippet ?? "",
+        source: url,
+        link: item.link ?? "",
+    };
+}
 
-            this.feedRepository
-                .deleteBySource(url)
-                .then(() => this.feedRepository.createMany(parsedNews))
-                .catch((err) => console.error("Background DB operation error:", err));
+async function parseFeed(fastify: FastifyInstance, url: string): Promise<News[]> {
+    const feed = await retry(async () => parser.parseURL(url), {
+        retries: 3,
+        factor: 2,
+        minTimeout: 1000,
+        onRetry: (err: Error, attempt) =>
+            fastify.log.warn(`Retry ${attempt} for ${url}: ${err.message}`),
+    });
 
-            return parsedNews;
-        }
+    return (feed.items || []).map((item) => normalizeItem(item, url));
+}
 
-        const news = await this.feedRepository.findBySource(url);
+export async function getFeedData(fastify: FastifyInstance, url: string, isForce = false) {
+    if (isForce) {
+        const parsedNews = await parseFeed(fastify, url);
 
-        if (news.length > 0) {
-            return news;
-        }
-        const parsedNews = await this.parseFeed(url);
-
-        this.feedRepository
-            .createMany(parsedNews)
-            .catch((err) => console.log("Background DB operation error", err));
+        feedRepo
+            .deleteBySource(fastify, url)
+            .then(() => feedRepo.createMany(fastify, parsedNews))
+            .catch((err) => fastify.log.error("Background DB operation error:", err));
 
         return parsedNews;
     }
 
-    async parseFeed(url: string): Promise<News[]> {
-        const feed = await retry(async () => this.parser.parseURL(url), {
-            retries: 3,
-            factor: 2,
-            minTimeout: 1000,
-            onRetry: (err: Error, attempt) =>
-                console.warn(`Retry ${attempt} for ${url}: ${err.message}`),
-        });
+    const news = await feedRepo.findBySource(fastify, url);
+    if (news.length > 0) return news;
 
-        return (feed.items || []).map((item) => this.normalizeItem(item, url));
-    }
+    const parsedNews = await parseFeed(fastify, url);
 
-    private normalizeItem(item: Parser.Item, url: string): News {
-        const isoDate = item.isoDate;
-        const date = isoDate ? new Date(isoDate).toISOString() : null;
-        const contentSnippet = item.contentSnippet ?? "";
+    feedRepo
+        .createMany(fastify, parsedNews)
+        .catch((err) => fastify.log.error("Background DB operation error:", err));
 
-        return {
-            id: new ObjectId().toHexString(),
-            title: item.title ?? null,
-            date,
-            contentSnippet,
-            source: url,
-        };
-    }
+    return parsedNews;
 }
