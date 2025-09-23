@@ -1,4 +1,5 @@
 export const getArticleDataSchema = {
+    tags: ["News"],
     querystring: {
         type: "object",
         required: ["url"],
