@@ -13,4 +13,5 @@ model News {
   date           String?
   contentSnippet String
   source         String
+  link           String
 }

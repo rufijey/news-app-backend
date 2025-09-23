@@ -1,4 +1,4 @@
-export const schema = {
+export const getFeedDataSchema = {
     querystring: {
         type: "object",
         properties: {
@@ -22,8 +22,9 @@ export const schema = {
                             date: { type: ["string", "null"] },
                             contentSnippet: { type: "string" },
                             source: { type: "string" },
+                            link: { type: "string" },
                         },
-                        required: ["id", "title", "date", "contentSnippet", "source"],
+                        required: ["id", "title", "date", "contentSnippet", "source", "link"],
                         additionalProperties: false,
                     },
                 },
