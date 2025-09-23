@@ -9,13 +9,11 @@ export default async function authRoutes(fastify: FastifyInstance) {
 
     route.post("/register", { schema: registerSchema }, async (request, reply) => {
         const { email, username, password } = request.body;
-        const result = await registerUser(fastify, email, username, password);
-        return reply.send(result);
+        return reply.send(await registerUser(fastify, email, username, password));
     });
 
     route.post("/login", { schema: loginSchema }, async (request, reply) => {
         const { email, password } = request.body;
-        const result = await loginUser(fastify, email, password);
-        return reply.send(result);
+        return reply.send(await loginUser(fastify, email, password));
     });
 }
