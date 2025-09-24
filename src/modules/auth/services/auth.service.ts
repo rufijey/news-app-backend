@@ -1,12 +1,12 @@
 import type { FastifyInstance } from "fastify";
 import { createUser, findUserByEmail } from "./user.repository";
+import {User} from "../types/user.types";
 
 export async function registerUser(
     fastify: FastifyInstance,
-    email: string,
-    username: string,
-    password: string,
+    userData: User
 ) {
+    const {email, username, password} = userData;
     const existing = await findUserByEmail(fastify, email);
     if (existing) throw fastify.httpErrors.conflict("Email already registered");
 
