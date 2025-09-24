@@ -1,4 +1,5 @@
 export const getFeedDataSchema = {
+    tags: ["News"],
     querystring: {
         type: "object",
         properties: {

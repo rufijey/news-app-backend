@@ -1,6 +1,6 @@
 import type { JsonSchemaToTsProvider } from "@fastify/type-provider-json-schema-to-ts";
 import type { FastifyInstance } from "fastify";
-import { getArticleDataSchema } from "../schemas/getArticleData";
+import { getArticleDataSchema } from "../schemas/getArticleData.schema";
 import { getFeedDataSchema } from "../schemas/getFeedData.schema";
 import { getArticleData } from "../services/article.service";
 import { getFeedData } from "../services/feed.service";
