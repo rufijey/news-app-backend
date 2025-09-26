@@ -6,9 +6,10 @@ export const EnvSchema = {
         HOST: { type: "string" },
         DEFAULT_RSS_URL: { type: "string", format: "uri" },
         API_URL: { type: "string", format: "uri" },
+        FRONTEND_URL: { type: "string", format: "uri" },
         JWT_SECRET: { type: "string" },
     },
-    required: ["PORT", "HOST", "DEFAULT_RSS_URL", "API_URL", "JWT_SECRET"],
+    required: ["PORT", "HOST", "DEFAULT_RSS_URL", "API_URL", "FRONTEND_URL", "JWT_SECRET"],
     additionalProperties: false,
 } as const;
 export type Config = FromSchema<typeof EnvSchema>;
