@@ -14,6 +14,7 @@ model News {
   contentSnippet String
   source         String
   link           String
+  image          String
 }
 
 model User {

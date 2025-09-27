@@ -17,6 +17,7 @@ function normalizeItem(item: Parser.Item, url: string): News {
         contentSnippet: item.contentSnippet ?? "",
         source: url,
         link: item.link ?? "",
+        image: item.enclosure?.url || "",
     };
 }
 

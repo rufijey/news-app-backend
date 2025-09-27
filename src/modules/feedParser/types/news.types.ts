@@ -5,6 +5,7 @@ export interface News {
     contentSnippet: string;
     source: string;
     link: string;
+    image: string;
 }
 
 export interface Article {
