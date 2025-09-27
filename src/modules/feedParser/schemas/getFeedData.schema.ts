@@ -24,6 +24,7 @@ export const getFeedDataSchema = {
                             contentSnippet: { type: "string" },
                             source: { type: "string" },
                             link: { type: "string" },
+                            image: { type: "string" },
                         },
                         required: ["id", "title", "date", "contentSnippet", "source", "link"],
                         additionalProperties: false,
