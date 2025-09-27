@@ -6,7 +6,7 @@ import type { News } from "../modules/feedParser/types/news.types";
 const feedCronPlugin: FastifyPluginAsync = async (fastify) => {
     const feedUrl = fastify.config.DEFAULT_RSS_URL;
 
-    const cronExpression = "0 * * * *";
+    const cronExpression = fastify.config.CRON_EXPRESSION;
 
     cron.schedule(cronExpression, async () => {
         fastify.log.info(`Starting background feed update: ${feedUrl}`);
